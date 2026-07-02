@@ -1,0 +1,79 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Perfiles</h1>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="exportExcel()" matTooltip="Exportar a Excel">
+        <mat-icon>description</mat-icon>
+        Excel
+      </button>
+      <button mat-stroked-button (click)="exportPdf()" matTooltip="Exportar a PDF">
+        <mat-icon>picture_as_pdf</mat-icon>
+        PDF
+      </button>
+      <button mat-flat-button color="primary" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Nuevo perfil
+      </button>
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Buscar perfil</mat-label>
+    <input matInput (input)="onSearch($any($event.target).value)" placeholder="Nombre" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <div class="table-card mat-elevation-z1">
+    <table mat-table [dataSource]="pagedProfiles()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let profile">{{ profile.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="sections">
+        <th mat-header-cell *matHeaderCellDef>Secciones</th>
+        <td mat-cell *matCellDef="let profile">
+          @if (profile.sections?.length) {
+            <mat-chip-set>
+              @for (section of profile.sections; track section.id) {
+                <mat-chip disableRipple>{{ section.name }}</mat-chip>
+              }
+            </mat-chip-set>
+          } @else {
+            -
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col">Acciones</th>
+        <td mat-cell *matCellDef="let profile" class="actions-col">
+          <button mat-icon-button (click)="openForm(profile)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="remove(profile)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    @if (!pagedProfiles().length) {
+      <div class="empty-state">
+        <mat-icon>badge</mat-icon>
+        <span>No se encontraron perfiles</span>
+      </div>
+    }
+
+    <mat-paginator
+      [length]="filteredProfiles().length"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="onPage($event)"
+    />
+  </div>
+</div>

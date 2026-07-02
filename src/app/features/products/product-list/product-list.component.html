@@ -1,0 +1,74 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Productos</h1>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="exportExcel()" matTooltip="Exportar a Excel">
+        <mat-icon>description</mat-icon>
+        Excel
+      </button>
+      <button mat-stroked-button (click)="exportPdf()" matTooltip="Exportar a PDF">
+        <mat-icon>picture_as_pdf</mat-icon>
+        PDF
+      </button>
+      <button mat-flat-button color="primary" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Nuevo producto
+      </button>
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Buscar producto</mat-label>
+    <input matInput (input)="onSearch($any($event.target).value)" placeholder="Nombre o marca" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <div class="table-card mat-elevation-z1">
+    <table mat-table [dataSource]="pagedProducts()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef>Marca</th>
+        <td mat-cell *matCellDef="let product">{{ product.brand }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Precio</th>
+        <td mat-cell *matCellDef="let product">{{ product.price | currency }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col">Acciones</th>
+        <td mat-cell *matCellDef="let product" class="actions-col">
+          <button mat-icon-button (click)="openForm(product)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="remove(product)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    @if (!pagedProducts().length) {
+      <div class="empty-state">
+        <mat-icon>inventory_2</mat-icon>
+        <span>No se encontraron productos</span>
+      </div>
+    }
+
+    <mat-paginator
+      [length]="filteredProducts().length"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="onPage($event)"
+    />
+  </div>
+</div>

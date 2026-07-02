@@ -1,0 +1,79 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Usuarios</h1>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="exportExcel()" matTooltip="Exportar a Excel">
+        <mat-icon>description</mat-icon>
+        Excel
+      </button>
+      <button mat-stroked-button (click)="exportPdf()" matTooltip="Exportar a PDF">
+        <mat-icon>picture_as_pdf</mat-icon>
+        PDF
+      </button>
+      <button mat-flat-button color="primary" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Nuevo usuario
+      </button>
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Buscar usuario</mat-label>
+    <input matInput (input)="onSearch($any($event.target).value)" placeholder="Nombre o correo" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <div class="table-card mat-elevation-z1">
+    <table mat-table [dataSource]="pagedUsers()">
+      <ng-container matColumnDef="code">
+        <th mat-header-cell *matHeaderCellDef>Codigo</th>
+        <td mat-cell *matCellDef="let user">{{ user.code ?? '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Usuario</th>
+        <td mat-cell *matCellDef="let user">{{ user.email || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="created_at">
+        <th mat-header-cell *matHeaderCellDef>Creado</th>
+        <td mat-cell *matCellDef="let user">{{ user.created_at ?? '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col">Acciones</th>
+        <td mat-cell *matCellDef="let user" class="actions-col">
+          <button mat-icon-button (click)="openForm(user)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="remove(user)" matTooltip="Eliminar">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    @if (!pagedUsers().length) {
+      <div class="empty-state">
+        <mat-icon>group</mat-icon>
+        <span>No se encontraron usuarios</span>
+      </div>
+    }
+
+    <mat-paginator
+      [length]="filteredUsers().length"
+      [pageIndex]="pageIndex()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="onPage($event)"
+    />
+  </div>
+</div>

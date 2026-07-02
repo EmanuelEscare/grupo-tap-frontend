@@ -1,0 +1,41 @@
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 12px;
+}
+
+table {
+  width: 100%;
+}
+
+.actions-col {
+  width: 96px;
+  text-align: right;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar mat-icon {
+  color: rgba(0, 0, 0, 0.35);
+}

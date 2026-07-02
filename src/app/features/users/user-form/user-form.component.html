@@ -1,0 +1,78 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="photo-row">
+      <div class="photo-preview">
+        @if (photoPreview()) {
+          <img [src]="photoPreview()" alt="Foto de perfil" />
+        } @else {
+          <mat-icon>person</mat-icon>
+        }
+      </div>
+      <div class="photo-actions">
+        <button type="button" mat-stroked-button (click)="photoInput.click()">
+          <mat-icon>upload</mat-icon>
+          Subir foto
+        </button>
+        @if (isEditMode) {
+          <span class="photo-hint">Deja este campo vacio para mantener la foto actual</span>
+        }
+        <input
+          #photoInput
+          type="file"
+          accept="image/*"
+          hidden
+          (change)="onPhotoSelected($event)"
+        />
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="name" />
+      @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+        <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Correo electronico</mat-label>
+      <input matInput type="email" formControlName="email" />
+      @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+        <mat-error>El correo es requerido</mat-error>
+      }
+      @if (form.controls.email.hasError('email')) {
+        <mat-error>Ingresa un correo valido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Telefono</mat-label>
+      <input matInput formControlName="phone" placeholder="+52..." />
+      @if (form.controls.phone.hasError('required') && form.controls.phone.touched) {
+        <mat-error>El telefono es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Perfiles</mat-label>
+      <mat-select formControlName="profile_ids" multiple>
+        @for (profile of profiles(); track profile.id) {
+          <mat-option [value]="profile.id">{{ profile.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close [disabled]="saving()">Cancelar</button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="saving()">
+      @if (saving()) {
+        <mat-progress-spinner diameter="18" mode="indeterminate" />
+      } @else {
+        <span>Guardar</span>
+      }
+    </button>
+  </mat-dialog-actions>
+</form>

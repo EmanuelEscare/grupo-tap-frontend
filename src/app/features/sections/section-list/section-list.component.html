@@ -1,0 +1,29 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Secciones</h1>
+  </div>
+
+  <div class="table-card mat-elevation-z1">
+    <table mat-table [dataSource]="sections()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let section">{{ section.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="slug">
+        <th mat-header-cell *matHeaderCellDef>Clave</th>
+        <td mat-cell *matCellDef="let section">{{ section.slug ?? '-' }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    @if (!sections().length) {
+      <div class="empty-state">
+        <mat-icon>view_list</mat-icon>
+        <span>No hay secciones registradas</span>
+      </div>
+    }
+  </div>
+</div>

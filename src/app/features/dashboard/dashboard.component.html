@@ -1,0 +1,16 @@
+<div class="page">
+  <div class="page-header">
+    <h1>Hola, {{ currentUser()?.name ?? 'bienvenido' }}</h1>
+  </div>
+
+  <div class="cards-grid">
+    @for (item of navItems; track item.route) {
+      <a [routerLink]="item.route" class="nav-card-link">
+        <mat-card class="nav-card" appearance="outlined">
+          <mat-icon class="nav-card-icon">{{ item.icon }}</mat-icon>
+          <span class="nav-card-label">{{ item.label }}</span>
+        </mat-card>
+      </a>
+    }
+  </div>
+</div>
